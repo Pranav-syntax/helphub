@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HelpHub - Community Emergency Assistance</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --accent: #f59e0b;
+            --danger: #dc2626;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        
+        .help-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .floating-button {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        
+        .urgent-tag {
+            animation: blink 1s step-end infinite alternate;
+        }
+        
+        @keyframes blink {
+            50% { opacity: 0.7; }
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="bg-white shadow-sm sticky top-0 z-10">
+            <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <img src="https://placehold.co/40x40" alt="HelpHub logo with hand helping icon in blue" class="rounded-full">
+                    <h1 class="text-2xl font-bold text-blue-600">HelpHub</h1>
+                </div>
+                <nav class="hidden md:flex space-x-6">
+                    <a href="{{ url_for('info') }}" class="text-gray-700 hover:text-blue-600">Community</a>
+                    <a href="{{ url_for('info') }}" class="text-gray-700 hover:text-blue-600">About</a>
+                    <a href="{{ url_for('info') }}" class="text-gray-700 hover:text-blue-600">Safety</a>
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Sign In</button>
+                </nav>
+                <button class="md:hidden text-gray-700">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-12 md:py-20">
+            <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-8 md:mb-0">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4">Community Help When You Need It Most</h2>
+                    <p class="text-lg mb-6">Request or offer urgent assistance in emergencies - medicine, food, transportation, and more from trusted neighbors.</p>
+                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                        <a href="{{ url_for('show_form') }}">
+                        <button class="bg-white text-blue-600 hover:bg-gray-100 px-6 py-3 rounded-full font-semibold">Request Help</button>
+                        </a>
+                        <button class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-6 py-3 rounded-full font-semibold">Offer Help</button>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <img src="{{ url_for('static', filename='helping-hands.png') }}" alt="Diverse community hand reaching toward each other forming a circle" class="rounded-lg shadow-xl border-4 border-white">
+                </div>
+            </div>
+        </section>
+
+        <!-- Search and Filter -->
+        <section class="py-8 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row gap-4 mb-6">
+                    <div class="flex-1 relative">
+                        <input type="text" placeholder="Search by location or type of help..." class="w-full p-4 pl-12 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                    <select class="p-4 rounded-lg border border-gray-300 bg-white">
+                        <option>All Categories</option>
+                        <option>Medical Assistance</option>
+                        <option>Food/Supplies</option>
+                        <option>Transportation</option>
+                        <option>Emergency Shelter</option>
+                        <option>Other</option>
+                    </select>
+                    <select class="p-4 rounded-lg border border-gray-300 bg-white">
+                        <option>Any Distance</option>
+                        <option>Within 1 mile</option>
+                        <option>Within 5 miles</option>
+                        <option>Within 10 miles</option>
+                    </select>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="urgent" class="mr-2 h-5 w-5 rounded text-red-600">
+                        <label for="urgent" class="text-red-600 font-medium">Show Urgent Only</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="verified" class="mr-2 h-5 w-5 rounded text-blue-600" checked>
+                        <label for="verified" class="text-gray-700 font-medium">Verified Members Only</label>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Help Requests Feed -->
+        <main class="flex-1 py-8 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-gray-800">Recent Requests Near You</h3>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-gray-500">Sort by:</span>
+                        <select class="p-2 rounded border border-gray-300 bg-white">
+                            <option>Most Recent</option>
+                            <option>Most Urgent</option>
+                            <option>Closest</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Request Card 1 -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden help-card transition duration-300">
+                        <div class="relative">
+                            <img src="https://placehold.co/600x400" alt="Person holding medicine bottle looking distressed" class="w-full h-48 object-cover">
+                            <div class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold urgent-tag">URGENT</div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="text-xl font-bold text-gray-800">Need emergency asthma medication</h4>
+                                <span class="text-sm text-gray-500">0.3 mi away</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Ran out of Ventolin inhaler, having difficulty breathing. Can meet at Walgreens.</p>
+                            <div class="flex items-center mb-4">
+                                <img src="https://placehold.co/40x40" alt="Profile picture of John, verified community member" class="w-10 h-10 rounded-full mr-3">
+                                <div>
+                                    <p class="font-medium">John D.</p>
+                                    <div class="flex items-center text-xs text-blue-600">
+                                        <i class="fas fa-check-circle mr-1"></i>
+                                        Verified
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium">Offer Help</button>
+                        </div>
+                    </div>
+
+                    <!-- Request Card 2 -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden help-card transition duration-300">
+                        <div class="relative">
+                            <img src="https://placehold.co/600x400" alt="Elderly woman sitting in wheelchair looking at empty fridge" class="w-full h-48 object-cover">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="text-xl font-bold text-gray-800">Groceries for elderly neighbor</h4>
+                                <span class="text-sm text-gray-500">0.7 mi away</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Unable to leave apartment. Need basic groceries - milk, bread, eggs, and bananas.</p>
+                            <div class="flex items-center mb-4">
+                                <img src="https://placehold.co/40x40" alt="Profile picture of Martha, senior community member" class="w-10 h-10 rounded-full mr-3">
+                                <div>
+                                    <p class="font-medium">Martha P.</p>
+                                    <div class="flex items-center text-xs text-blue-600">
+                                        <i class="fas fa-check-circle mr-1"></i>
+                                        Verified
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium">Offer Help</button>
+                        </div>
+                    </div>
+
+                    <!-- Request Card 3 -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden help-card transition duration-300">
+                        <div class="relative">
+                            <img src="https://placehold.co/600x400" alt="Crutches leaning against wall with hospital wheelchair in background" class="w-full h-48 object-cover">
+                            <div class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold urgent-tag">URGENT</div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="text-xl font-bold text-gray-800">Ride to physical therapy appointment</h4>
+                                <span class="text-sm text-gray-500">1.2 mi away</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Need wheelchair accessible transport to rehab center tomorrow at 9am. Can contribute $10 for gas.</p>
+                            <div class="flex items-center mb-4">
+                                <img src="https://placehold.co/40x40" alt="Profile picture of David, recovering from surgery" class="w-10 h-10 rounded-full mr-3">
+                                <div>
+                                    <p class="font-medium">David L.</p>
+                                    <div class="flex items-center text-xs text-blue-600">
+                                        <i class="fas fa-check-circle mr-1"></i>
+                                        Verified
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium">Offer Help</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex justify-center">
+                    <button class="bg-white text-blue-600 border border-blue-600 hover:bg-blue-50 px-6 py-3 rounded-full font-semibold">Load More Requests</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Safety Information -->
+        <section class="bg-gray-100 py-12">
+            <div class="container mx-auto px-4">
+                <h3 class="text-2xl font-bold text-center mb-8">Staying Safe in Our Community</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="text-blue-600 text-3xl mb-4">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <h4 class="font-bold text-lg mb-2">Verified Members</h4>
+                        <p class="text-gray-600">All users go through identity verification checks before they can post requests or offers.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="text-blue-600 text-3xl mb-4">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h4 class="font-bold text-lg mb-2">In-App Messaging</h4>
+                        <p class="text-gray-600">Keep all communications within the HelpHub platform for added security and record keeping.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="text-blue-600 text-3xl mb-4">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h4 class="font-bold text-lg mb-2">Report Concerns</h4>
+                        <p class="text-gray-600">Easily flag any suspicious activity for immediate review by our community safety team.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-8">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row justify-between">
+                    <div class="mb-6 md:mb-0">
+                        <div class="flex items-center space-x-2 mb-4">
+                            <img src="https://placehold.co/40x40" alt="HelpHub logo with hand helping icon in white">
+                            <h3 class="text-xl font-bold">HelpHub</h3>
+                        </div>
+                        <p class="text-gray-400">Connecting communities in times of need.</p>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+                        <div>
+                            <h4 class="font-bold mb-4">Community</h4>
+                            <ul class="space-y-2">
+                                <li><a href="#" class="text-gray-400 hover:text-white">Find Help</a></li>
+                                <li><a href="#" class="text-gray-400 hover:text-white">Offer Help</a></li>
+                                <li><a href="#" class="text-gray-400 hover:text-white">Events</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold mb-4">Resources</h4>
+                            <ul class="space-y-2">
+                                <li><a href="#" class="text-gray-400 hover:text-white">Safety Tips</a></li>
+                                <li><a href="#" class="text-gray-400 hover:text-white">FAQs</a></li>
+                                <li><a href="#" class="text-gray-400 hover:text-white">Partners</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold mb-4">Company</h4>
+                            <ul class="space-y-2">
+                                <li><a href="#" class="text-gray-400 hover:text-white">About</a></li>
+                                <li><a href="#" class="text-gray-400 hover:text-white">Careers</a></li>
+                                <li><a href="#" class="text-gray-400 hover:text-white">Press</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="border-t border-gray-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-400 mb-4 md:mb-0">© 2023 HelpHub. All rights reserved.</p>
+                    <div class="flex space-x-6">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Floating Action Button (Mobile) -->
+        <button class="fixed bottom-6 right-6 bg-red-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-xl floating-button md:hidden">
+            <i class="fas fa-plus text-xl"></i>
+        </button>
+    </div>
+
+    <script>
+        // Geolocation permission request
+        document.addEventListener('DOMContentLoaded', function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        // Success - position.coords.latitude/longitude available
+                        console.log('Position:', position.coords.latitude, position.coords.longitude);
+                        // You would typically send these to your backend in a real app
+                    },
+                    function(error) {
+                        console.error('Geolocation error:', error);
+                    }
+                );
+            }
+
+            // Mock functionality for demonstration purposes
+            const urgentCheckbox = document.getElementById('urgent');
+            urgentCheckbox.addEventListener('change', function() {
+                const urgentCards = document.querySelectorAll('.urgent-tag').forEach(tag => {
+                    tag.closest('.help-card').style.display = 
+                        this.checked && !tag.closest('.help-card').querySelector('.urgent-tag') ? 
+                        'none' : 'block';
+                });
+            });
+
+            // Simulate loading more requests
+            document.querySelector('button:contains("Load More Requests")').addEventListener('click', function() {
+                alert('In a real implementation, this would load more requests from the server.');
+            });
+        });
+
+        // Request form for modal (would be implemented in a real app)
+        function showRequestForm() {
+            alert('This would show a modal form for submitting a help request in a complete implementation.');
+        }
+
+        // Offer help handler
+        document.querySelectorAll('button:contains("Offer Help")').forEach(button => {
+            button.addEventListener('click', function() {
+                const card = this.closest('.help-card');
+                const title = card.querySelector('h4').textContent;
+                alert(`Offer to help with: ${title}\n\nIn a real app, this would open a messaging interface.`);
+            });
+        });
+    </script>
+</body>
+</html>

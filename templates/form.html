@@ -1,0 +1,111 @@
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Public+Sans%3Awght%40400%3B500%3B700%3B900"
+    />
+
+    <title>REQUEST FORM</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  </head>
+  <body>
+    <div
+      class="relative flex size-full min-h-screen flex-col bg-gray-50 group/design-root overflow-x-hidden"
+      style='--select-button-svg: url(&apos;data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724px%27 height=%2724px%27 fill=%27rgb(92,116,138)%27 viewBox=%270 0 256 256%27%3e%3cpath d=%27M181.66,170.34a8,8,0,0,1,0,11.32l-48,48a8,8,0,0,1-11.32,0l-48-48a8,8,0,0,1,11.32-11.32L128,212.69l42.34-42.35A8,8,0,0,1,181.66,170.34Zm-96-84.68L128,43.31l42.34,42.35a8,8,0,0,0,11.32-11.32l-48-48a8,8,0,0,0-11.32,0l-48,48A8,8,0,0,0,85.66,85.66Z%27%3e%3c/path%3e%3c/svg%3e&apos;); font-family: "Public Sans", "Noto Sans", sans-serif;'
+    >
+      <div class="layout-container flex h-full grow flex-col">
+        <header class="bg-blue-600 py-4">
+          <h1 class="text-center text-white text-2xl font-bold">HelpHub</h1>
+        </header>
+        <div class="px-4 flex flex-1 justify-center py-5">
+          <div class="layout-content-container flex flex-col w-full max-w-[480px]">
+            <h2 class="text-[#101518] tracking-light text-[28px] font-bold leading-tight px-4 text-center pb-3 pt-5">Request Help – Tell Us What You Need</h2>
+            <p class="text-[#101518] text-base font-normal leading-normal pb-3 pt-1 px-4 text-center">
+              Fill out the form below to let trusted neighbors know how they can assist you.
+            </p>
+            <form method="POST" action="{{ url_for('submit_request') }}">
+              <div class="flex flex-wrap items-end gap-4 px-4 py-3">
+                <label class="flex flex-col min-w-40 flex-1">
+                  <input
+                    name="name"
+                    placeholder="Name"
+                    class="form-input w-full rounded-xl text-[#101518] focus:outline-0 focus:ring-0 border-none bg-[#eaedf1] h-14 placeholder:text-[#5c748a] p-4 text-base"
+                    required
+                  />
+                </label>
+              </div>
+              <div class="flex flex-wrap items-end gap-4 px-4 py-3">
+                <label class="flex flex-col min-w-40 flex-1">
+                  <input
+                    name="phone"
+                    placeholder="Phone Number"
+                    class="form-input w-full rounded-xl text-[#101518] focus:outline-0 focus:ring-0 border-none bg-[#eaedf1] h-14 placeholder:text-[#5c748a] p-4 text-base"
+                    required
+                  />
+                </label>
+              </div>
+              <div class="flex flex-wrap items-end gap-4 px-4 py-3">
+                <label class="flex flex-col min-w-40 flex-1">
+                  <input
+                    name="address"
+                    placeholder="Address"
+                    class="form-input w-full rounded-xl text-[#101518] focus:outline-0 focus:ring-0 border-none bg-[#eaedf1] h-14 placeholder:text-[#5c748a] p-4 text-base"
+                    required
+                  />
+                </label>
+              </div>
+              <div class="flex flex-wrap items-end gap-4 px-4 py-3">
+                <label class="flex flex-col min-w-40 flex-1">
+                  <select
+                    id="category"
+                    name="category"
+                    class="form-input w-full rounded-xl text-[#101518] focus:outline-0 focus:ring-0 border-none bg-[#eaedf1] h-14 bg-[image:--select-button-svg] placeholder:text-[#5c748a] p-4 text-base"
+                    required
+                  >
+                    <option value="" disabled selected class="text-[#5c748a]">Categories</option>
+                    <option value="Medical Assistance">Medical Assistance</option>
+                    <option value="Food supplies">Food Supplies</option>
+                    <option value="Transportation">Transportation</option>
+                    <option value="Shelter">Shelter</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </label>
+              </div>
+              <div class="flex flex-wrap items-end gap-4 px-4 py-3">
+                <label class="flex flex-col min-w-40 flex-1">
+                  <textarea
+                    name="description"
+                    placeholder="Description"
+                    class="form-input w-full rounded-xl text-[#101518] focus:outline-0 focus:ring-0 border-none bg-[#eaedf1] min-h-36 placeholder:text-[#5c748a] p-4 text-base"
+                    required
+                  ></textarea>
+                </label>
+              </div>
+              <div class="flex justify-center">
+                <div class="flex gap-3 flex-wrap px-4 py-3 w-full justify-center">
+                  <button
+                    type="submit"
+                    class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-blue-500 text-white text-sm font-bold grow"
+                  >
+                    <span class="truncate">Submit Request</span>
+                  </button>
+                  <button
+                    type="reset"
+                    class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#eaedf1] text-[#101518] text-sm font-bold grow"
+                  >
+                    <span class="truncate">Cancel</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
