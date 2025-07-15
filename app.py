@@ -13,7 +13,7 @@ db = mysql.connector.connect(
 
 cursor = db.cursor()
 
-# ✅ Home route should render index.html
+
 @app.route('/')
 def home():
     return render_template("index.html")
@@ -24,7 +24,7 @@ def info():
 
 
 
-# ✅ Submit route handles form submission
+
 @app.route('/submit', methods=['POST'])
 def submit_request():
     name = request.form.get('name')
@@ -43,7 +43,7 @@ def submit_request():
 
     return render_template("success.html")
 
-# ✅ Optional route to open the form directly
+ directly
 @app.route('/form')
 def show_form():
     return render_template("form.html")
