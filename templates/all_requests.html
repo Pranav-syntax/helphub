@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Help Requests - HelpHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+  <header class="bg-white shadow-md sticky top-0 z-10">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <img src="{{ url_for('static', filename='logo.jpeg') }}" width ="80" height="80" alt="HelpHub logo with hand helping icon in blue" class="rounded-full">
+        <h1 class="text-2xl font-bold text-blue-600">HelpHub</h1>
+      </div>
+      <nav class="hidden md:flex space-x-6">
+        
+        <a href="{{ url_for('home') }}" class="text-blue-600 font-semibold">Home</a>
+      </nav>
+    </div>
+  </header>
+    <div class="max-w-5xl mx-auto py-10 px-4">
+        <h1 class="text-3xl font-bold text-blue-600 mb-6">All Help Requests</h1>
+        <form method="GET" class="mb-6">
+        <label for="category" class="mr-2 font-medium">Filter by Category:</label>
+        <select name="category" id="category" onchange="this.form.submit()" class="p-2 border rounded">
+        <option value="All" {% if selected_category == "All" or not selected_category %}selected{% endif %}>All</option>
+        <option value="Medical Assistance" {% if selected_category == "Medical Assistance" %}selected{% endif %}>Medical Assistance</option>
+        <option value="Food/Supplies" {% if selected_category == "Food/Supplies" %}selected{% endif %}>Food/Supplies</option>
+        <option value="Transportation" {% if selected_category == "Transportation" %}selected{% endif %}>Transportation</option>
+        <option value="Emergency Shelter" {% if selected_category == "Emergency Shelter" %}selected{% endif %}>Emergency Shelter</option>
+        <option value="Other" {% if selected_category == "Other" %}selected{% endif %}>Other</option>
+        </select>
+        </form>
+
+
+        {% for req in requests %}
+        <div class="bg-white rounded-lg shadow-md p-6 mb-4">
+            <h2 class="text-xl font-semibold text-blue-700 mb-2">{{ req[3] }}</h2> <!-- category -->
+            <p><strong>Name:</strong> {{ req[0] }}</p> <!-- name -->
+            <p><strong>Phone:</strong> {{ req[1] }}</p> <!-- phone -->
+            <p><strong>Address:</strong> {{ req[2] }}</p> <!-- address -->
+            <p><strong>Description:</strong> {{ req[4] }}</p> <!-- description -->
+        </div>
+        {% endfor %}
+
+        {% if not requests %}
+        <p class="text-gray-500">No requests found.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

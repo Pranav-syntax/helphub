@@ -74,7 +74,12 @@
                         <a href="{{ url_for('show_form') }}">
                         <button class="bg-white text-blue-600 hover:bg-gray-100 px-6 py-3 rounded-full font-semibold">Request Help</button>
                         </a>
-                        <button class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-6 py-3 rounded-full font-semibold">Offer Help</button>
+                        <a href="{{ url_for('show_all_requests') }}">
+                            <button class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-6 py-3 rounded-full font-semibold">
+                             Offer Help
+                             </button>
+                        </a>
+
                     </div>
                 </div>
                 <div class="md:w-1/2 flex justify-center">
@@ -86,9 +91,10 @@
         <!-- Search and Filter -->
         <section class="py-8 bg-white">
             <div class="container mx-auto px-4">
-                <div class="flex flex-col md:flex-row gap-4 mb-6">
+                <form action="{{ url_for('search') }}" method="GET" class="flex flex-col md:flex-row gap-4 mb-6">
                     <div class="flex-1 relative">
-                        <input type="text" placeholder="Search by location or type of help..." class="w-full p-4 pl-12 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <input type="text" name="query" placeholder="Search by location or type of help..."
+                            class="w-full p-4 pl-12 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
                         <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                     </div>
                     <select class="p-4 rounded-lg border border-gray-300 bg-white">
@@ -99,13 +105,9 @@
                         <option>Emergency Shelter</option>
                         <option>Other</option>
                     </select>
-                    <select class="p-4 rounded-lg border border-gray-300 bg-white">
-                        <option>Any Distance</option>
-                        <option>Within 1 mile</option>
-                        <option>Within 5 miles</option>
-                        <option>Within 10 miles</option>
-                    </select>
-                </div>
+
+                </form>
+
                 <div class="flex flex-wrap gap-2">
                     <div class="flex items-center">
                         <input type="checkbox" id="urgent" class="mr-2 h-5 w-5 rounded text-red-600">
