@@ -14,14 +14,23 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   </head>
   <body>
+  <body class="bg-gray-100 text-gray-800">
+ <header class="bg-white shadow-md sticky top-0 z-10">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <img src="{{ url_for('static', filename='logo.jpeg') }}" width ="80" height="80" alt="HelpHub logo with hand helping icon in blue" class="rounded-full">
+        <h1 class="text-2xl font-bold text-blue-600">HelpHub</h1>
+      </div>
+      <nav class="hidden md:flex space-x-6">
+         <a href="{{ url_for('home') }}" class="text-blue-600 font-semibold">Home</a>
+      </nav>
+    </div>
+  </header>
     <div
       class="relative flex size-full min-h-screen flex-col bg-gray-50 group/design-root overflow-x-hidden"
       style='--select-button-svg: url(&apos;data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724px%27 height=%2724px%27 fill=%27rgb(92,116,138)%27 viewBox=%270 0 256 256%27%3e%3cpath d=%27M181.66,170.34a8,8,0,0,1,0,11.32l-48,48a8,8,0,0,1-11.32,0l-48-48a8,8,0,0,1,11.32-11.32L128,212.69l42.34-42.35A8,8,0,0,1,181.66,170.34Zm-96-84.68L128,43.31l42.34,42.35a8,8,0,0,0,11.32-11.32l-48-48a8,8,0,0,0-11.32,0l-48,48A8,8,0,0,0,85.66,85.66Z%27%3e%3c/path%3e%3c/svg%3e&apos;); font-family: "Public Sans", "Noto Sans", sans-serif;'
     >
-      <div class="layout-container flex h-full grow flex-col">
-        <header class="bg-blue-600 py-4">
-          <h1 class="text-center text-white text-2xl font-bold">HelpHub</h1>
-        </header>
+      
         <div class="px-4 flex flex-1 justify-center py-5">
           <div class="layout-content-container flex flex-col w-full max-w-[480px]">
             <h2 class="text-[#101518] tracking-light text-[28px] font-bold leading-tight px-4 text-center pb-3 pt-5">Request Help – Tell Us What You Need</h2>

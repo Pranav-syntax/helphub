@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Results - HelpHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+ <header class="bg-white shadow-md sticky top-0 z-10">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <img src="{{ url_for('static', filename='logo.jpeg') }}" width ="80" height="80" alt="HelpHub logo with hand helping icon in blue" class="rounded-full">
+        <h1 class="text-2xl font-bold text-blue-600">HelpHub</h1>
+      </div>
+      <nav class="hidden md:flex space-x-6">
+         <a href="{{ url_for('home') }}" class="text-blue-600 font-semibold">Home</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container mx-auto py-8 px-4">
+        <h1 class="text-2xl font-bold mb-4">Search Results for "{{ query }}"</h1>
+
+        {% if results %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for row in results %}
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h2 class="text-xl font-semibold text-blue-600">{{ row[0] }}</h2>
+                        <p class="text-sm text-gray-500 mb-1">{{ row[1] }} | {{ row[2] }}</p>
+                        <p class="mb-2 font-medium">Category: {{ row[3] }}</p>
+                        <p>{{ row[4] }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No results found.</p>
+        {% endif %}
+
+        <div class="mt-6">
+            <a href="{{ url_for('home') }}" class="text-blue-600 hover:underline">← Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>
